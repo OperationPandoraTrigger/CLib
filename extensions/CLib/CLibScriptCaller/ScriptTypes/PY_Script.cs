@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CLibScriptCaller.ScriptTypes
 {
-    class PY_Script : BaseScript
+    class PY_Script : IBase_Script
     {
         static PY_Script()
         {

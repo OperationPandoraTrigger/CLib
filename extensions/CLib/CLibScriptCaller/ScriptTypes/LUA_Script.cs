@@ -8,7 +8,7 @@ using NLua;
 
 namespace CLibScriptCaller.ScriptTypes
 {
-    class LUA_Script : BaseScript
+    class LUA_Script : IBase_Script
     {
 
         private LuaFunction function = null;
@@ -21,7 +21,7 @@ namespace CLibScriptCaller.ScriptTypes
         public void Load(string path, string specialParamter)
         {
             luaEngine = new Lua();
-            path = Path.Combine();
+            path = Path.Combine(DllEntry.defaultPath, path);
             string source = File.ReadAllText(path);
             luaEngine.DoString(source);
             

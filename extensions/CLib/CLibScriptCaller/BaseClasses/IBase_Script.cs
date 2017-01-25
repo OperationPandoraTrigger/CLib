@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CLibScriptCaller
 {
-    interface BaseScript
+    interface IBase_Script
     {
         void Load(string script, string specialParamter);
         string Execute(string input);

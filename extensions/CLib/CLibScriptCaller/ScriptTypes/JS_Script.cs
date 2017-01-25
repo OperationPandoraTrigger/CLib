@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EdgeJs;
 namespace CLibScriptCaller.ScriptTypes
 {
-    class JS_Script : BaseScript
+    class JS_Script : IBase_Script
     {
 
         private Func<object, Task<object>> script;
@@ -26,9 +26,7 @@ namespace CLibScriptCaller.ScriptTypes
                 try
                 {
                     if (File.Exists(path))
-                    {
                         File.Delete(path);
-                    }
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
 
                     Stream resFilestream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);

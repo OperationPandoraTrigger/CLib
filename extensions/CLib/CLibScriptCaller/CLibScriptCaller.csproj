@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseClasses\BaseScript.cs" />
+    <Compile Include="BaseClasses\IBase_Script.cs" />
     <Compile Include="DllEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseClasses\ScriptError.cs" />

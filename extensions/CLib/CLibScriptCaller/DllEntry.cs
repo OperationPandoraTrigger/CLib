@@ -39,7 +39,7 @@ namespace CLibScriptCaller
             get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
         }
         private static double currentScriptPointer = 0;
-        internal static Dictionary<string, BaseScript> scriptDic = new Dictionary<string, BaseScript>();
+        internal static Dictionary<string, IBase_Script> scriptDic = new Dictionary<string, IBase_Script>();
         internal static Dictionary<string, string> scriptNamesDic = new Dictionary<string, string>();
 
         // CLib Entry Point
@@ -87,7 +87,7 @@ namespace CLibScriptCaller
                 return scriptNamesDic[path.ToLower()];
 
             // select right script Type(maybe add Later more types of compatible Scripts)
-            BaseScript script = null;
+            IBase_Script script = null;
             switch (scriptType.ToLower())
             {
                 case "cs":
@@ -166,7 +166,7 @@ namespace CLibScriptCaller
                 return "ERROR: SCRIPT POINTER NOT FOUND";
             if (scriptDic.ContainsKey(newPointer))
                 return "ERROR: NEW SCRIPT POINTER ALLREADY USED";
-            BaseScript script = scriptDic[oldPointer];
+            IBase_Script script = scriptDic[oldPointer];
             RemoveScript(oldPointer);
             scriptDic.Add(newPointer, script);
             return "DONE";

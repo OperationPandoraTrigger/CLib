@@ -8,7 +8,7 @@ using IronRuby.Runtime;
 
 namespace CLibScriptCaller.ScriptTypes
 {
-    class RB_Script: BaseScript
+    class RB_Script: IBase_Script
     {
         static RB_Script()
         {

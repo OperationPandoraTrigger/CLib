@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace CLibScriptCaller.ScriptTypes
 {
-    class CS_Script : BaseScript
+    class CS_Script : IBase_Script
     {
         private readonly Regex _referenceRegex = new Regex(@"^[\ \t]*(?:\/{2})?\#r[\ \t]+""([^""]+)""", RegexOptions.Multiline);
 
