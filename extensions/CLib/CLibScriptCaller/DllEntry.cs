@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
-
 using CLibScriptCaller.ScriptTypes;
 
 namespace CLibScriptCaller
@@ -51,13 +50,17 @@ namespace CLibScriptCaller
 
             switch (inputs[0].ToLower())
             {
+                // rename function pointer for better and easier sqf work
                 case "rename":
                     return RenameScriptPointer(inputs[1], inputs[2]);
+                // reload Function(maybe later only in dev mode activ)
                 case "reload":
                     return LoadScript(inputs[1], inputs[2], inputs[3], true);
-                case "load":
+                // get current Pointer for script Function
                 case "getpointer":
+                    return GetScriptPointer(inputs[0]);
                 case "compile":
+                case "load":
                     // Load Script and Compile it, Return ScriptPointer to SQF so that we can call later the Script
                     return LoadScript(inputs[1], inputs[2], inputs[3], false);
 
@@ -65,14 +68,13 @@ namespace CLibScriptCaller
                 case "call":
                 case "run":
                     return RunScript(inputs[1], inputs[2]);
-
-                case "loadrun":
+                // Run Script without Pre-Loading of the script
+                case "instrun":
                     return LoadAndRunScript(inputs[1], inputs[2], inputs[3], inputs[4]);
                 // remove/delte Script from Dic
                 case "delete":
                 case "remove":
                     return RemoveScript(inputs[1]);
-
                 default:
                     return "ERROR: UNKNOWN COMMAND";
             }
@@ -91,6 +93,22 @@ namespace CLibScriptCaller
                 case "cs":
                 case "csharp":
                     script = new CS_Script();
+                    break;
+                case "lua":
+                    script = new LUA_Script();
+                    break;
+                case "js":
+                case "javascript":
+                case "nodejs":
+                    script = new JS_Script();
+                    break;
+                case "rb":
+                case "ruby":
+                    script = new RB_Script();
+                    break;
+                case "py":
+                case "python":
+                    script = new PY_Script();
                     break;
                 default:
                     return "ERROR: SCRIPT TYPE DONT EXIST";
