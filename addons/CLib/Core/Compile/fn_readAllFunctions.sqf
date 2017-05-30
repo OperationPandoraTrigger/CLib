@@ -27,11 +27,14 @@ private _fnc_checkNext = {
 
 private _fnc_readSubModule = {
     params ["_modPath", "_modName", "_moduleName", "_modulePath", "_config", "_children"];
-    DUMP("SubModule Found: " + configName _x);
-    private _subModuleName = configName _x;
+    DUMP("SubModule Found: " + configName _config);
+    private _subModuleName = configName _config;
     {
         private _modulePath = +_modulePath;
         _modulePath pushBack _subModuleName;
+        if (isText(_x >> "path")) then {
+            _modulePath = [getText(_x >> "path")];
+        };
         [_modPath, _modName, _moduleName, _modulePath, _x] call _fnc_checkNext;
         nil
     } count _children;
@@ -50,7 +53,16 @@ private _fnc_readFunction = {
     };
 
     private _functionName = format [(["%1_%2_fnc_%3", "%1_fnc_%3"] select _api), _modName, _moduleName, _name];
-    private _folderPath = format ["%1\%2\fn_%3.sqf", _modPath, _modulePath, _name];
+
+    private _folderPath = if (isText (_config >> "path")) then {
+        private _fp = getText(_config >> "path");
+        if ((_fp select [(count _fp) - 4]) != ".sqf") then {
+            _fp = format ["%1\fn_%2.sqf", _fp, _name];
+        };
+        _fp
+    } else {
+        format ["%1\%2\fn_%3.sqf", _modPath, _modulePath, _name];
+    };
 
     parsingNamespace setVariable [_functionName + "_data", [_folderPath, format ["%1/%2", _modName, _moduleName], _onlyServer, _modName]];
     GVAR(allFunctionNamesCached) pushBackUnique _functionName;
