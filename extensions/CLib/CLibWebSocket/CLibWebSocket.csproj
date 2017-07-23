@@ -11,10 +11,10 @@
     <AssemblyName>CLibWebSocket</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <DllExportNamespace>CLib</DllExportNamespace>
+    <DllExportNamespace>RGiesecke.DllExport</DllExportNamespace>
     <DllExportDDNSCecil>true</DllExportDDNSCecil>
     <DllExportSkipOnAnyCpu>false</DllExportSkipOnAnyCpu>
-    <DllExportOrdinalsBase>1</DllExportOrdinalsBase>
+    <DllExportOrdinalsBase>0</DllExportOrdinalsBase>
     <DllExportGenExpLib>false</DllExportGenExpLib>
     <DllExportOurILAsm>false</DllExportOurILAsm>
   </PropertyGroup>
@@ -23,7 +23,7 @@
     <OutputPath>..\..\..\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>WIN64</DefineConstants>
