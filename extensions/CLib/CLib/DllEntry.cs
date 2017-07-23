@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,22 +10,30 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.Windows.Threading;
 namespace CLib
 {
     public class DllEntry
     {
         private static string _inputBuffer;
         private static string _outputBuffer;
-        private static readonly Debugger Debugger;
+        private static Debugger Debugger;
         private static readonly Dictionary<string, string> AvailableExtensions = new Dictionary<string, string>();
         private static readonly Dictionary<int, Task<string>> Tasks = new Dictionary<int, Task<string>>();
 
         static DllEntry()
         {
-            Debugger = new Debugger();
-            Debugger.Show();
-            Debugger.Log("Extension framework initializing");
+
+            Thread viewerThread = new Thread(delegate ()
+            {
+                Debugger = new Debugger();
+                System.Windows.Threading.Dispatcher.Run();
+            });
+
+            while (Debugger == null)
+            {
+                Thread.Sleep(10);
+            }
 
             try
             {
@@ -35,14 +44,35 @@ namespace CLib
                 Debugger.Log(e);
             }
 
-
             Debugger.Log("Extension framework initialized");
+        }
+
+#if WIN64
+        [DllExport("RVExtensionVersion")]
+#else
+		[DllExport("_RVExtensionVersion@6", CallingConvention.StdCall)]
+#endif
+        public static void RVExtensionVersion(StringBuilder output, int outputSize)
+        {
+            outputSize--;
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            try
+            {
+                string location = executingAssembly.Location;
+                if (location == null)
+                    throw new Exception("Assembly location not found");
+                output.Append(FileVersionInfo.GetVersionInfo(location).FileVersion);
+            }
+            catch (Exception e)
+            {
+                output.Append(e.Message);
+            }
         }
 
 #if WIN64
         [DllExport("RVExtension")]
 #else
-        [DllExport("_RVExtension@12", CallingConvention.StdCall)]
+		[DllExport("_RVExtension@12", CallingConvention.StdCall)]
 #endif
         public static void RVExtension(StringBuilder output, int outputSize, [MarshalAs(UnmanagedType.LPStr)] string input)
         {
@@ -51,6 +81,9 @@ namespace CLib
             switch (input)
             {
                 case "":
+                    return;
+                case "debugger":
+                    Debugger.Toggle();
                     return;
                 case "version":
                     var executingAssembly = Assembly.GetExecutingAssembly();
@@ -176,7 +209,7 @@ namespace CLib
 #if WIN64
                     var extensionPaths = Directory.GetFiles(fullPath, "*_x64.dll", SearchOption.AllDirectories);
 #else
-                    var extensionPaths = Directory.GetFiles(fullPath, "*.dll", SearchOption.AllDirectories);
+					var extensionPaths = Directory.GetFiles(fullPath, "*.dll", SearchOption.AllDirectories);
 #endif
                     foreach (string extensionPath in extensionPaths)
                     {
@@ -186,7 +219,7 @@ namespace CLib
 #if WIN64
                             if (!exports.Contains("RVExtension"))
 #else
-                            if (!exports.Contains("_RVExtension@12"))
+							if (!exports.Contains("_RVExtension@12"))
 #endif
                                 continue;
 
@@ -208,7 +241,7 @@ namespace CLib
                                 AvailableExtensions.Add(filename, extensionPath);
                                 Debugger.Log($"Added: {filename} at: {extensionPath}");
                             }
-                            
+
                         }
                         catch (Win32Exception e)
                         {
@@ -224,5 +257,6 @@ namespace CLib
                 }
             }
         }
+
     }
 }
