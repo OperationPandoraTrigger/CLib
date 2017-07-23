@@ -17,22 +17,19 @@
     -
 */
 
-#define POS [-2000,-2000,-2000]
+#define POS [-2000, -2000, -2000]
 
 params [["_isGlobal", false]];
 
 private _ret = if (_isGlobal isEqualType true && {_isGlobal}) then {
-    private _grp = call CFUNC(getLogicGroup);
-    _grp createUnit ["Logic", POS, [], 0, "NONE"];
+    createSimpleObject ["A3\Weapons_F\empty.p3d", POS];
 } else {
     createLocation ["fakeTown", POS, 0, 0];
 };
 
-
 if (isNil QGVAR(allCustomNamespaces)) then {
     GVAR(allCustomNamespaces) = [];
 };
-
 GVAR(allCustomNamespaces) pushBack _ret;
 
 _ret

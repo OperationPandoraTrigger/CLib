@@ -21,14 +21,14 @@ private _fnc_checkNext = {
     if (_children isEqualTo []) then {
         [_modPath, _modName, _moduleName, _modulePath, _config] call _fnc_readFunction;
     } else {
-        [_modPath, _modName, _moduleName, _modulePath, _config, _children] call _fnc_readSubModule
+        [_modPath, _modName, _moduleName, _modulePath, _config, _children] call _fnc_readSubModule;
     };
 };
 
 private _fnc_readSubModule = {
     params ["_modPath", "_modName", "_moduleName", "_modulePath", "_config", "_children"];
-    DUMP("SubModule Found: " + configName _x);
-    private _subModuleName = configName _x;
+    DUMP("SubModule Found: " + configName _config);
+    private _subModuleName = configName _config;
     {
         private _modulePath = +_modulePath;
         _modulePath pushBack _subModuleName;
@@ -44,7 +44,7 @@ private _fnc_readFunction = {
 
     private _name = configName _config;
     private _api = (getNumber (_config >> "api") isEqualTo 1);
-    private _onlyServer = (getNumber (_config >> "onlyServer") isEqualTo 1);
+    private _onlyServer = (getNumber (_config >> "serverOnly") isEqualTo 1);
     if (((toLower _name) find "serverinit") > -1) then {
         _onlyServer = true;
     };

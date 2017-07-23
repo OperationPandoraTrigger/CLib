@@ -1,7 +1,4 @@
-#define DFNC(f) class f
-#define FNC(f) DFNC(f)
-#define APIFNC(f) DFNC(f) {api = 1;}
-#define MODULE(m) class m
+#include "ModuleMacros.hpp"
 
 class CfgCLibModules {
     class CLib {
@@ -9,11 +6,11 @@ class CfgCLibModules {
 
         MODULE(3dGraphics) {
             dependency[] = {"CLib/Events"};
-            APIFNC(3dGraphicsPosition);
+            FNC(3dGraphicsPosition);
             APIFNC(add3dGraphics);
-            APIFNC(build3dGraphicsCache);
+            FNC(build3dGraphicsCache);
             FNC(clientInit);
-            APIFNC(draw3dGraphics);
+            FNC(draw3dGraphics);
             APIFNC(remove3dGraphics);
         };
 
@@ -22,7 +19,6 @@ class CfgCLibModules {
             APIFNC(doAnimation);
             APIFNC(getDeathAnimation);
             APIFNC(getDefaultAnimation);
-            FNC(init);
         };
 
         MODULE(ConfigCaching) {
@@ -30,7 +26,7 @@ class CfgCLibModules {
             APIFNC(configProperties);
             FNC(init);
             APIFNC(returnParents);
-            APIFNC(arrayToPath);
+            FNC(arrayToPath);
             APIFNC(getDataCached);
         };
 
@@ -40,25 +36,25 @@ class CfgCLibModules {
             FNC(init);
 
             MODULE(Autoload) {
-                FNC(autoloadEntryPoint);
+                FNCSERVER(autoloadEntryPoint);
                 FNC(callModules);
-                APIFNC(loadModules);
-                FNC(loadModulesServer);
-                FNC(sendFunctions);
-                FNC(sendFunctionsLoop);
+                APIFNCSERVER(loadModules);
+                FNCSERVER(loadModulesServer);
+                FNCSERVER(sendFunctions);
+                FNCSERVER(sendFunctionsLoop);
             };
 
             MODULE(Compression) {
-                FNC(checkAllFunctionCompression) { serverOnly = 1; };
-                FNC(checkCompression) { serverOnly = 1; };
-                FNC(compressString) { serverOnly = 1; };
-                FNC(decompressString) { serverOnly = 1; };
+                FNCSERVER(checkAllFunctionCompression);
+                FNCSERVER(checkCompression);
+                FNCSERVER(compressString);
+                FNCSERVER(decompressString);
             };
 
             MODULE(ExtensionFramework) {
                 APIFNC(callExtension);
-                FNC(extensionRequest) { serverOnly = 1; };
-                FNC(extensionFetch) { serverOnly = 1; };
+                APIFNCSERVER(extensionRequest);
+                FNCSERVER(extensionFetch);
                 FNC(initExtensionFramework);
                 FNC(serverInitExtensionFramework);
             };
@@ -82,11 +78,11 @@ class CfgCLibModules {
                 APIFNC(getFOV);
                 APIFNC(getNearUnits);
                 APIFNC(groupPlayers);
-                APIFNC(initVoiceDetection);
+                APIFNC(inFOV);
+                FNC(initVoiceDetection);
                 APIFNC(log);
                 APIFNC(name);
                 APIFNC(sanitizeString);
-                FNC(serverInit);
                 APIFNC(shuffleArray);
                 FNC(dumpPerformanceInformation);
                 APIFNC(setVariablePublic);
@@ -119,7 +115,7 @@ class CfgCLibModules {
         };
 
         MODULE(Gear) {
-            dependency[] = {};
+            dependency[] = {"CLib/PerFrame"};
             MODULE(Loadout) {
                 APIFNC(getAllLoadouts);
                 APIFNC(getLoadoutDetails);
@@ -135,6 +131,15 @@ class CfgCLibModules {
             APIFNC(getAllGear);
             APIFNC(restoreGear);
             APIFNC(saveGear);
+        };
+
+        MODULE(Hashes) {
+            APIFNC(containsKey);
+            APIFNC(containsValue);
+            APIFNC(createHash);
+            APIFNC(forEachHash);
+            APIFNC(getHash);
+            APIFNC(setHash);
         };
 
         MODULE(Interaction) {
@@ -162,7 +167,7 @@ class CfgCLibModules {
             dependency[] = {"CLib/Events"};
             FNC(init);
             FNC(client);
-            FNC(server) { serverOnly = 1; };
+            FNCSERVER(server);
             APIFNC(isLocalised);
             APIFNC(readLocalisation);
             APIFNC(formatLocalisation);
@@ -222,16 +227,22 @@ class CfgCLibModules {
         MODULE(RemoteExecution) {
             FNC(execute);
             FNC(init);
-            FNC(handleIncomeData);
+            FNC(handleIncomeData) { serverOnly = 1; };
             APIFNC(remoteExec);
             FNC(serverInit);
         };
 
         MODULE(Settings) {
             dependency[] = {"CLib/Namespaces"};
-            APIFNC(getSetting);
+            FNC(serverInit);
+            FNC(clientInit);
             FNC(init);
+            APIFNC(getSettingOld);
+            APIFNC(getSetting);
+            APIFNC(getSettings);
+            APIFNC(getSettingSubClasses);
             APIFNC(loadSettings);
+            APIFNC(registerSettings);
         };
 
         MODULE(SimpleObjectFramework) {
@@ -239,10 +250,7 @@ class CfgCLibModules {
             APIFNC(createSimpleObjectComp);
             FNC(init);
             APIFNC(readSimpleObjectComp);
-            FNC(exportSimpleObjectComp) {
-                api = 1;
-                serverOnly = 1;
-            };
+            APIFNCSERVER(exportSimpleObjectComp);
         };
 
         MODULE(Statemachine) {

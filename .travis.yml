@@ -3,10 +3,25 @@ branches:
   - master
   - release
 
-language: node_js
-node_js:
-  - "node"
-before_script:
-  - cd tools
-script:
-  - node sqf_validator.js
+dist: trusty
+language: python
+
+matrix:
+  include:
+    ###############################################################################
+    # Job #1 - SQF validation
+    ###############################################################################
+    - python: '3.5'
+      before_script:
+      - cd tools
+      script:
+      - python3 sqf_validator.py
+
+    ###############################################################################
+    # Job #2 - Building Extensions Disabled because not working :(
+    ###############################################################################
+    #- language: csharp
+    #  before_install:
+    #  - cd extensions
+    #  - cd CLib
+    #  solution: CLib.sln

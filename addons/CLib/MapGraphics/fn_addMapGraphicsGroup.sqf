@@ -94,7 +94,7 @@ private _completeGroupData = [];
                 ["_height", 25, [0, []]],
                 ["_angle", 0, [0, objNull]],
                 ["_lineColor", [0, 0, 0, 1]],
-                ["_fillColor", [0, 0, 0, 1]],
+                ["_fillColor", ""],
                 ["_code", {}]
             ];
             _completeGroupData pushBack [_class, _position, _width, _height, _angle, _lineColor, _fillColor, _code];
@@ -106,7 +106,7 @@ private _completeGroupData = [];
                 ["_height", 25, [0, []]],
                 ["_angle", 0, [0, objNull]],
                 ["_lineColor", [0, 0, 0, 1]],
-                ["_fillColor", [0, 0, 0, 1]],
+                ["_fillColor", ""],
                 ["_code", {}]
             ];
             _completeGroupData pushBack [_class, _position, _width, _height, _angle, _lineColor, _fillColor, _code];
@@ -143,15 +143,12 @@ private _completeGroupData = [];
 } count _groupData;
 
 // select the correct state
-private _stateNum = ["normal", "hover", "selected"] find _state;
-if (_stateNum == -1) then {
-    _stateNum = 0;
-};
+private _stateNum = 0 max (["normal", "hover", "selected"] find _state);
 
 // save the data
-private _currentIcon = [GVAR(MapGraphicsGroup), _groupName, [_layer, 0, 0, [], [], []]] call CFUNC(getVariable);
+private _currentIcon = GVAR(MapGraphicsGroup) getVariable [_groupName, [_layer, 0, 0, [], [], []]];
 _currentIcon set [_stateNum + 3, _completeGroupData];
-_currentIcon set [1, diag_tickTime];
+_currentIcon set [1, time];
 [GVAR(MapGraphicsGroup), _groupName, _currentIcon] call CFUNC(setVariable);
 // increment map graphics cache
 GVAR(MapGraphicsCacheBuildFlag) = GVAR(MapGraphicsCacheBuildFlag) + 1;

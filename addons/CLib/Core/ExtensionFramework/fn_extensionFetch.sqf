@@ -27,14 +27,16 @@ _result = _result select [0, count _result - 1];
 
 // Parse the data
 if (_result select [0, 1] == GVAR(STX)) exitWith {
-    _result select [1, count _result - 1]
+    _result select [1]
 };
 
 if (_result select [0, 1] == GVAR(SOH)) exitWith {
     private _results = _result splitString GVAR(SOH);
     {
         (_x splitString GVAR(STX)) params ["_taskId", "_result"];
-        (GVAR(tasks) param [parseNumber _taskId, [objNull, 0]]) params ["_sender", "_senderId"];
+        _taskId = parseNumber _taskId;
+        (GVAR(tasks) param [_taskId, [objNull, 0]]) params ["_sender", "_senderId"];
+        GVAR(tasks) set [_taskId, objNull];
 
         [QGVAR(extensionResult), _sender, [_senderId, _result]] call CFUNC(targetEvent);
         GVAR(pendingTasks) = GVAR(pendingTasks) - 1;
