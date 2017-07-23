@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLibLogging", "CLibLogging\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLibWebSocket", "CLibWebSocket\CLibWebSocket.csproj", "{9573C0AE-7B68-4B63-B7DD-E982E62F6086}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLibScriptCaller", "CLibScriptCaller\CLibScriptCaller.csproj", "{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{9573C0AE-7B68-4B63-B7DD-E982E62F6086}.Release|x64.Build.0 = Release|x64
 		{9573C0AE-7B68-4B63-B7DD-E982E62F6086}.Release|x86.ActiveCfg = Release|x86
 		{9573C0AE-7B68-4B63-B7DD-E982E62F6086}.Release|x86.Build.0 = Release|x86
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Debug|x64.ActiveCfg = Debug|x64
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Debug|x64.Build.0 = Debug|x64
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Debug|x86.ActiveCfg = Debug|x86
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Debug|x86.Build.0 = Debug|x86
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Release|x64.ActiveCfg = Release|x64
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Release|x64.Build.0 = Release|x64
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Release|x86.ActiveCfg = Release|x86
+		{6BF3A9CE-0D4F-452E-BF52-6A3C1A8CCA45}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

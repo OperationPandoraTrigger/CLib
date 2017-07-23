@@ -21,7 +21,7 @@ namespace CLibScriptCaller.ScriptTypes
         public void Load(string path, string specialParamter)
         {
             luaEngine = new Lua();
-            path = Path.Combine(DllEntry.defaultPath, path);
+            path = Path.Combine(DllEntry.DefaultPath, path);
             string source = File.ReadAllText(path);
             luaEngine.DoString(source);
             

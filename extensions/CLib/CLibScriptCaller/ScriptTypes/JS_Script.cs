@@ -22,7 +22,7 @@ namespace CLibScriptCaller.ScriptTypes
                 if (parts[0] != "edge")
                     continue;
                 var path = string.Join("\\", parts) + "." + ext;
-                path = Path.Combine(DllEntry.defaultPath, path);
+                path = Path.Combine(DllEntry.DefaultPath, path);
                 try
                 {
                     if (File.Exists(path))

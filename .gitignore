@@ -45,6 +45,7 @@ extensions/CLib/.vs
 extensions/CLib/*/bin
 extensions/CLib/*/obj
 extensions/CLib/packages
+extensions/CLib/*/edge
 *.exp
 *.pdb
 *.lib

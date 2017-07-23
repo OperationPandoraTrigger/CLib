@@ -13,6 +13,9 @@ namespace CLibScriptCaller
     public class DllEntry
     {
         // arma Default Entry Point
+#if WIN64
+#else
+#endif
         [DllExport("_RVExtension@12", CallingConvention = CallingConvention.Winapi)]
         public static void RVExtension(StringBuilder output, int outputSize, [MarshalAs(UnmanagedType.LPStr)] string input)
         {
@@ -34,7 +37,7 @@ namespace CLibScriptCaller
         }
 
 
-        public static string defaultPath
+        public static string DefaultPath
         {
             get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
         }
@@ -43,7 +46,7 @@ namespace CLibScriptCaller
         internal static Dictionary<string, string> scriptNamesDic = new Dictionary<string, string>();
 
         // CLib Entry Point
-        [DllExport("_CLibCallScript@4", CallingConvention = CallingConvention.Winapi)]
+        [DllExport("CLibCallScript", CallingConvention = CallingConvention.Winapi)]
         public static string CallScript(string input)
         {
             string[] inputs = input.Split(new char[] { ';' }, 5);

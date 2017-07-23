@@ -39,7 +39,7 @@ namespace CLibScriptCaller.ScriptTypes
                 var dll = match.Groups[1].Value;
                 if (!Path.IsPathRooted(dll))
                 {
-                    var dllpath = Path.Combine(DllEntry.defaultPath, dll);
+                    var dllpath = Path.Combine(DllEntry.DefaultPath, dll);
                     if (File.Exists(dllpath))
                     {
                         dll = dllpath;
