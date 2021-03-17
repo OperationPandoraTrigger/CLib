@@ -11,16 +11,21 @@
     Publish a variable but wait a certain amount of time before allowing it to be published it again.
 
     Parameter(s):
-    0: Object the variable should be assigned to <Object>
-    1: Name of the variable <String>
-    2: Value of the variable <Any>
-    3: Embargo delay <NUMBER> (Optional. Default: 1)
+    0: Object the variable should be assigned to <Object> (Default: objNull)
+    1: Name of the variable <String> (Default: "")
+    2: Value of the variable <Anything>
+    3: Embargo delay <Number> (Default: 1)
 
     Returns:
     None
 */
 
-params ["_object", "_varName", "_value", ["_delay", 1]];
+params [
+    ["_object", objNull, [objNull]],
+    ["_varName", "", [""]],
+    "_value",
+    ["_delay", 1, [0]]
+];
 
 // set value locally
 _object setVariable [_varName, _value];
@@ -43,7 +48,7 @@ _object setVariable [format [QGVAR(onEmbargo_%1), _varName], _object];
     private _curValue = _object getVariable _varName;
 
     //If value at start of embargo doesn't equal current, then broadcast and start new embargo
-    if (!(_value isEqualTo _curValue)) then {
+    if (_value isNotEqualTo _curValue) then {
         [_object, _varName, _curValue, _delay] call CFUNC(setVariablePublic);
     };
 }, _delay, _this] call CFUNC(wait);

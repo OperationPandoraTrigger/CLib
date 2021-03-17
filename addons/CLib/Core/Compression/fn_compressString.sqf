@@ -8,20 +8,25 @@
     String Compression
 
     Parameter(s):
-    0: input string <String>
+    0: Input string <String> (Default: "")
 
     Returns:
-    0: compressed String <String>
+    Compressed string <String>
 */
 
-params ["_input"];
+params [
+    ["_input", "", [""]],
+    ["_useSQF", false]
+];
+
+// if !(_output in ["", GVAR(ACK)]) exitWith { // currently disabled to reduce loading times on Linux!
+if (!_useSQF) exitWith {
+    private _output = [-1, "CLibCompression", "Compress", _input] call CFUNC(extensionRequest);
+    _output
+};
 
 private _rawInput = toArray _input;
 private _rawOutput = [];
-
-if (true) exitWith { //TODO Check if extension exists
-    [-1, "CLibCompression", "Compress", _input] call CFUNC(extensionRequest);
-};
 
 // 18/5 would be optimal but may take a lot more time, 11/4 is faster but not that efficient
 #define WINDOWSIZE 2048
@@ -87,7 +92,7 @@ _rawOutput append (_rawInput select [0, MINMATCHLENGTH]);
     nil
 } count _rawInput;
 
-if (!(_writeCache isEqualTo [])) then {
+if (_writeCache isNotEqualTo []) then {
     _rawOutput pushBack _encodeFlag;
     _rawOutput append _writeCache;
 };

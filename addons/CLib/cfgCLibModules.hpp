@@ -33,7 +33,6 @@ class CfgCLibModules {
 
         MODULE(ConfigCaching) {
             dependency[] = {"CLib/Namespaces"};
-            FNC(arrayToPath);
             APIFNC(configProperties);
             APIFNC(getConfigDataCached);
             APIFNC(getConfigData);
@@ -45,6 +44,7 @@ class CfgCLibModules {
             dependency[] = {"CLib/Events"};
 
             FNC(init);
+            FNC(serverInit);
 
             MODULE(Autoload) {
                 FNCSERVER(autoloadEntryPoint);
@@ -53,6 +53,10 @@ class CfgCLibModules {
                 FNCSERVER(loadModulesServer);
                 FNCSERVER(sendFunctions);
                 FNCSERVER(sendFunctionsLoop);
+            };
+
+            MODULE(ClientAddonModuleLoader) {
+                FNC(postInit);
             };
 
             MODULE(Compression) {
@@ -75,6 +79,7 @@ class CfgCLibModules {
                 APIFNC(cachedCall);
                 APIFNC(codeToString);
                 APIFNC(compatibleMagazines);
+                APIFNC(compileFinal);
                 APIFNC(createPPEffect);
                 APIFNC(deleteAtEntry);
                 APIFNC(directCall);
@@ -156,7 +161,11 @@ class CfgCLibModules {
             APIFNC(createHash);
             APIFNC(forEachHash);
             APIFNC(getHash);
+            APIFNC(hashKeys);
             APIFNC(hashToNamespace);
+            APIFNC(hashValues);
+            APIFNC(hashToTuple);
+            APIFNC(isHash);
             APIFNC(namespaceToHash);
             APIFNC(setHash);
         };
@@ -205,7 +214,7 @@ class CfgCLibModules {
             APIFNC(nearestMapGraphicsGroup);
             APIFNC(removeMapGraphicsEventhandler);
             APIFNC(removeMapGraphicsGroup);
-            APIFNC(TriggerMapGraphicsEvent);
+            APIFNC(triggerMapGraphicsEvent);
             APIFNC(registerMapControl);
             APIFNC(unregisterMapControl);
         };

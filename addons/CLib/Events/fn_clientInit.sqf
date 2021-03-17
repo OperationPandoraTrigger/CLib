@@ -16,6 +16,7 @@
 
 // This is needed to provide a player object for zeus controlled units. Important to ensure that player is not null here (which is done in autoload).
 CLib_Player = player;
+CGVAR(PauseMenuOpen) = false;
 uiNamespace setVariable ["CLib_Player", player];
 parsingNamespace setVariable ["CLib_Player", player];
 GVAR(lastZeusStatus) = false;
@@ -44,7 +45,7 @@ private _codeStr = "private ['_oldValue', '_currentValue'];";
     // Build a name for the variable where we store the data. Fill it with the initial value.
     private _varName = format [QGVAR(EventData_%1), _name];
     GVAR(EventNamespace) setVariable [_varName, call _code];
-    _codeStr = _codeStr + format ["_oldValue = %4 getVariable '%2'; _currentValue = call %1; if (!(_oldValue isEqualTo _currentValue)) then { ['%5Changed', [_currentValue, _oldValue]] call %3; _oldValue = %4 setVariable ['%2', _currentValue]; };", _code, _varName, QCFUNC(localEvent), QGVAR(EventNamespace), _name];
+    _codeStr = _codeStr + format ["_oldValue = %4 getVariable '%2'; _currentValue = call %1; if (_oldValue isNotEqualTo _currentValue) then { ['%5Changed', [_currentValue, _oldValue]] call %3; _oldValue = %4 setVariable ['%2', _currentValue]; };", _code, _varName, QCFUNC(localEvent), QGVAR(EventNamespace), _name];
     nil
 } count [
     ["player", {missionNamespace getVariable ["bis_fnc_moduleRemoteControl_unit", player]}],
@@ -58,7 +59,6 @@ private _codeStr = "private ['_oldValue', '_currentValue'];";
     ["getConnectedUAV", {getConnectedUAV CLib_Player}],
     ["currentVisionMode", {currentVisionMode CLib_Player}],
     ["playerInventory", {CLib_Player call CFUNC(getAllGear)}],
-    ["visibleMap", {visibleMap}],
     ["visibleGPS", {visibleGPS}],
     ["playerSide", {playerSide}],
     ["cursorTarget", {cursorTarget}],
@@ -66,11 +66,18 @@ private _codeStr = "private ['_oldValue', '_currentValue'];";
     ["groupUnits", {units CLib_Player}],
     ["assignedTeam", {assignedTeam CLib_Player}],
     ["cameraView", {cameraView}],
+    ["allMapMarkers", {allMapMarkers}],
     ["inCurator", {isNull curatorCamera}],
-    ["inEGSpectator", {isNil "BIS_EGSpectator_initialized"}]
+    ["inEGSpectator", {isNil "BIS_EGSpectator_initialized"}],
+    ["pauseMenuVisible", {!isNull (findDisplay 49)}]
 ];
 
 [compile _codeStr, 0] call CFUNC(addPerFrameHandler);
+
+addMissionEventHandler ["Map", {
+    params ["_mapVisible", "_mapIsForced"];
+    ["visibleMapChanged", [_mapVisible, !_mapVisible, _mapIsForced]] call CFUNC(localEvent);
+}];
 
 // Import the vanilla events in the event system.
 {
@@ -101,9 +108,13 @@ private _codeStr = "private ['_oldValue', '_currentValue'];";
     "Killed",
     "Respawn",
     "AnimStateChanged",
-    "HandleDamage"
+    "GetInMan"
 ];
 
+["pauseMenuVisibleChanged", {
+    (_this select 0) params ["_open"];
+    CGVAR(PauseMenuOpen) = _open;
+}] call CFUNC(addEventHandler);
 // Fix an Arma bug
 ["vehicleChanged", {
     (_this select 0) params ["_newVehicle"];

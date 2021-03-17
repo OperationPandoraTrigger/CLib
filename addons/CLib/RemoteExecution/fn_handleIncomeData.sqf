@@ -9,7 +9,7 @@
 
     Parameter(s):
     0: Target to what the Event should get sendet <Number, Object, Side, Group, Array> (Default: 0)
-    1: Arguments for the function or command <Any> (Default: [])
+    1: Arguments for the function or command <Anything> (Default: [])
     2: Function or command that get executed on the remote clients <String> (Default: "")
 
     Returns:
@@ -66,7 +66,7 @@ private _targets = [];
 } count _target;
 
 // exit with no targets are applyed
-if !(_targets isEqualTo []) then {
+if (_targets isNotEqualTo []) then {
     // make Targets Unique
     _targets = _targets arrayIntersect _targets;
 

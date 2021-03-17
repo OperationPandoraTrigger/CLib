@@ -28,8 +28,8 @@ GVAR(ignoredLogEventNames_1) = [];
     ["cursortargetchanged", 1],
     ["cursorobjectchanged", 1],
     ["playerinventorychanged", 1],
-    [QEGVAR(ExtensionFramework,extensionRequest), 0],
-    [QEGVAR(ExtensionFramework,extensionResult), 0]
+    [QEGVAR(Core,extensionRequest), 0],
+    [QEGVAR(Core,extensionResult), 0]
 ];
 
 // EventHandler to ensure that missionStarted EH get triggered if the missionStarted event already fired
@@ -275,15 +275,14 @@ GVAR(ignoredLogEventNames_1) = [];
     GVAR(missionStartedTriggered) = true;
     #define REFILL_TIMINGS 15
     GVAR(entityCreatedSM) = call CFUNC(createStatemachine);
-
-    DFUNC(entityCreated) = {
+    DFUNC(entityCreated) = [{
         params ["_obj"];
         if !(_obj getVariable [QGVAR(isProcessed), false] || [_obj, ["Animal", "Logic"]] call CFUNC(isKindOfArray) || (typeOf _obj) isEqualTo "") then {
             ["entityCreated", _obj] call CFUNC(localEvent);
             _obj setVariable [QGVAR(isProcessed), true];
             GVAR(entitiesCached) pushBackUnique _obj;
         };
-    };
+    }] call CFUNC(compileFinal);
 
     ["cursorObjectChanged", {
         (_this select 0) params ["_obj"];
